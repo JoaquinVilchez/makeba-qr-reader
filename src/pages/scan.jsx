@@ -1,11 +1,17 @@
 import { db } from "@/config/firebase";
+import { NoSSR } from "@kwooshung/react-no-ssr";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import swal from 'sweetalert';
+
 
 export default function Home() {
   const [tickets, setTickets] = useState([]);
 
+  const onError = (error) => {
+    return swal("ERROR", error, "error");
+  }
   const getTickets = async () => {
     const col = collection(db, "tickets");
     const snapshot = await getDocs(col);
@@ -23,9 +29,10 @@ export default function Home() {
       await updateDoc(ticketRef, {
         ...data
       });
-      return console.log("Document successfully updated");
+      getTickets()
+      return swal("EXITO", "El ticket es válido", "success");
     } catch (error) {
-      return console.error("Error updating document: ", error);
+      return swal("ERROR", "Hubo un error, intente de nuevo", "error");
     }
   }
 
@@ -37,12 +44,12 @@ export default function Home() {
             status: 'USED'
           }, ticket.id);
         }
-        return console.log('Ticket already used')
+        return swal("QR INVALIDO", "El QR ya fue escaneado", "error");
       }
-      return console.log('Ticket not found')
+      return swal("EL QR NO EXISTE", "El ticket no existe en la base de datos", "error");
     })
   }
-
+  
   useEffect(() => {
     getTickets()
   }, [])
@@ -50,10 +57,12 @@ export default function Home() {
   return (
     <>
       <div className="container mx-auto mt-8 max-w-[560px]">
+      <NoSSR>
         <Scanner
           onResult={(text, result) => scanTicket(text, result)}
-          onError={(error) => console.log(error?.message)}
+          onError={(error) => onError(error?.message)}
         />
+      </NoSSR>
       </div>
     </>
   );
