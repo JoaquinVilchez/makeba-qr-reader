@@ -3,11 +3,15 @@ import { NoSSR } from "@kwooshung/react-no-ssr";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import swal from 'sweetalert';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
 
 
 export default function Home() {
   const [tickets, setTickets] = useState([]);
+  const [isScanning, setIsScanning] = useState(false);
+  const MySwal = withReactContent(Swal)
 
   const onError = (error) => {
     return swal("ERROR", error, "error");
@@ -30,26 +34,42 @@ export default function Home() {
         ...data
       });
       getTickets()
-      return swal("EXITO", "El ticket es válido", "success");
+      return modalAlert("EXITO", "El ticket es válido", "success", false);
     } catch (error) {
-      return swal("ERROR", "Hubo un error, intente de nuevo", "error");
+      return modalAlert("ERROR", "Hubo un error, intente de nuevo", "error", false);
     }
   }
 
   const scanTicket = async (text, result) => {
-    tickets.map(async ticket => {
-      if (ticket.code === text) {
-        if(ticket.status != 'USED') {
-          return await updateTicket({
-            status: 'USED'
-          }, ticket.id);
+    console.log(isScanning)
+    if (isScanning===false) {
+      const ticket = tickets.find(ticket => ticket.code === text);
+      if (ticket) {
+        if (ticket.status !== 'USED') {
+          await updateTicket({ status: 'USED' }, ticket.id);
+        } else {
+          modalAlert('QR INVALIDO', 'El QR ya fue escaneado', 'error', false);
         }
-        return swal("QR INVALIDO", "El QR ya fue escaneado", "error");
+      } else {
+        modalAlert('EL QR NO EXISTE', 'El ticket no existe en la base de datos', 'error', false);
       }
-      return swal("EL QR NO EXISTE", "El ticket no existe en la base de datos", "error");
+    }
+    setIsScanning(true);
+  }
+
+  const modalAlert = async (title, text, icon, isScanning) => {
+    Swal.fire({
+      title,
+      text,
+      icon,
+      confirmButtonText: 'Cerrar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setIsScanning(isScanning);
+      }
     })
   }
-  
+
   useEffect(() => {
     getTickets()
   }, [])
@@ -61,6 +81,7 @@ export default function Home() {
         <Scanner
           onResult={(text, result) => scanTicket(text, result)}
           onError={(error) => onError(error?.message)}
+          tracker={false}
         />
       </NoSSR>
       </div>
