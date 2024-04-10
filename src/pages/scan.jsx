@@ -14,7 +14,7 @@ export default function Home() {
   const MySwal = withReactContent(Swal)
 
   const onError = (error) => {
-    return swal("ERROR", error, "error");
+    return modalAlert("ERROR", error, "error", false);
   }
   const getTickets = async () => {
     const col = collection(db, "tickets");
