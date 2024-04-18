@@ -2,6 +2,7 @@ import { db } from "@/config/firebase";
 import { NoSSR } from "@kwooshung/react-no-ssr";
 import { Scanner } from "@yudiel/react-qr-scanner";
 import { collection, doc, getDocs, updateDoc } from "firebase/firestore";
+import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -81,6 +82,18 @@ export default function Home() {
           tracker={false}
         />
       </NoSSR>
+      </div>
+      <div className="flex flex-col justify-between items-center pb-4 border-b border-dashed border-gray-900 mb-4">
+        <Link
+          className="bg-green-600 hover:bg-opacity-80 text-white rounded-lg px-4 py-2 my-3 duration-200"
+          href="/"
+        >
+          VOLVER
+        </Link>
+      </div>
+
+      <div className="flex flex-col justify-between items-center pb-4 border-b border-dashed border-gray-900 mb-4">
+        <img src="/images/logo_mkbprod.png" alt="logo" className="w-32 mt-4" />
       </div>
     </>
   );
