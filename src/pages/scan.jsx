@@ -95,7 +95,7 @@ export default function Home() {
         <div className="flex flex-col justify-between items-center pb-4 mb-4">
           <Link
             className="bg-green-600 hover:bg-opacity-80 text-white rounded-lg px-4 py-2 my-3 duration-200"
-            href="/"
+            href="/lectores"
           >
             VOLVER
           </Link>
@@ -130,7 +130,7 @@ export default function Home() {
             <div className="flex flex-col justify-between items-center pb-4 mb-4">
             <Link
               className="bg-green-600 hover:bg-opacity-80 text-white rounded-lg px-4 py-2 my-3 duration-200"
-              href="/"
+              href="/lectores"
             >
               VOLVER A INICIO
             </Link>
