@@ -5,7 +5,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/carta');
+    router.push('https://venti.com.ar/evento/makeba-15-de-junio');
   }, []);
 
   return null;
