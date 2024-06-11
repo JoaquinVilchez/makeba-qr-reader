@@ -13,7 +13,7 @@ export default function Home() {
         `}</style>
       </Head>
       <iframe
-        src="https://drive.google.com/file/d/1egH1yiBLTdfICeCMP_Zr5qJ5H-kQjKHI/preview"
+        src="https://drive.google.com/file/d/1vA5vRPgbCJOBKOJyNejnE5KDP1Ro5NuE/preview"
         width="100%"
         height="100%"
         title="Makeba Ticket"
